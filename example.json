@@ -1,0 +1,17 @@
+{
+    "firstName":"Jack",
+    "lastName":"Sparrow",
+    "hobbies":["robbing","looting","pillaging"],
+    "age":99,
+    "hasChildren":true,
+    "children":[
+        {
+            "firstName":"Jill",
+            "age":5
+        },
+        {
+            "firstName":"Jackie",
+            "age":16
+        }
+    ]
+}
