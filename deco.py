@@ -115,3 +115,5 @@ def say_hi():
 
 say_hi()
 say_hi()
+
+## example 2 
