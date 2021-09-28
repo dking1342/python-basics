@@ -5,16 +5,16 @@
 ## Make a new project
 to make a new project use the command in the main folder:
 
-'''
+```
 python3 manage.py runserver
-'''
+```
 
 ## Create a new app
 to make a new app use the command in the main folder:
 
-'''
+```
 python3 manage.py startapp *appname*
-'''
+```
 
 ## Add files and folders
 add a templates folder with a subfolder the same name as the app. create your views and link to the urls. then go to the settings.py file to add the app to the list of installed apps
@@ -31,28 +31,28 @@ models connect the backend api to the database. each model is a class and has th
 ## Migration / migrate the database 
 with the newly made model it can be mapped to a database. a migration will take the info from the model and create it in the database. use this commange to do a migration of the main app folder:
 
-'''
+```
 python3 manage.py migrate
-'''
+```
 
 to migrate an individual app then you need to make a migration folder/file and then run the script:
 
-'''
+```
 python3 manage.py makemigrations 
-'''
+```
 
 then the script:
 
-'''
+```
 python3 manage.py migrate
-'''
+```
 
 ## Django ORM
 to get to the django ORM shell use:
 
-'''
+```
 python3 manage.py shell
-'''
+```
 
 must import the models first and then you can interact with the data/db
 
