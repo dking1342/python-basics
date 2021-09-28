@@ -1,0 +1,47 @@
+
+
+## Getting started
+
+# Make a new project
+to make a new project use the command in the main folder:
+python3 manage.py runserver
+
+# create a new app
+to make a new app use the command in the main folder:
+python3 manage.py startapp *appname*
+
+# add files and folders
+add a templates folder with a subfolder the same name as the app. create your views and link to the urls. then go to the settings.py file to add the app to the list of installed apps
+
+# add urls to app and also to main django app
+go to the main app urls file and add any parent url that will be used in a sub-app. then go to the sub-app urls and list all the urls that will be used with the parent urls. 
+
+# create views
+create a view that will be used for each url/route. this will be the callback function within the url. the view can be html files that contain the content that will be rendered in the browser. alternatively, views can also be created on the frontend through a framework, library like react, vue, angular
+
+# make a model
+models connect the backend api to the database. each model is a class and has the info for the database table included. django has an orm that is used to define the data types of each column and also when interacting with the database, as opposed to SQL
+
+# migration / migrate the database 
+with the newly made model it can be mapped to a database. a migration will take the info from the model and create it in the database. use this commange to do a migration of the main app folder:
+python3 manage.py migrate
+
+to migrate an individual app then you need to make a migration folder/file and then run the script:
+python3 manage.py makemigrations 
+
+then the script:
+python3 manage.py migrate
+
+# django ORM
+to get to the django ORM shell use:
+python3 manage.py shell
+
+must import the models first and then you can interact with the data/db
+
+*crud operations*
+get all: .all()
+get first: .all()[0]
+get by id: .get(id='id')
+create/save: .save()
+update: 
+delete:  
