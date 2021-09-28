@@ -94,3 +94,31 @@ to output data:
 {{ output data }}
 ```
 
+## Static pages
+static pages are for rendering static pages to the browser. first go to the urls for the main app and import django.contrib.staticfiles.urls from staticfiles_urlpatterns
+
+then at the bottom of the urls file you need to append the urlspatter with the staticfiles urlpatterns that you just imported
+
+go to settings to the static urls and update the static url for the static files. you need to tell django this also by writing:
+
+```
+STATICFILES_DIRS = [
+    BASE_DIR / "assets"
+]
+```
+
+create the assets folder in the main app folder and add files like styling, etc that can be used by the static page
+
+to access in the html file use:
+
+```
+{% load static %}
+```
+
+on the top of the page then use:
+
+```
+{% static 'static file' %}
+```
+
+to refer to the static file
