@@ -64,3 +64,16 @@ must import the models first and then you can interact with the data/db
 #### update: 
 #### delete:  
 
+## django admin 
+go to the url admin/ to access the django admin functionality
+
+### make a superuser
+use the script:
+
+```
+python3 manage.py createsuperuser
+```
+
+create username and password that you will use then go back to the browser and login
+
+go to app folder, to the admin.py file. register the model so that you can see in the admin
