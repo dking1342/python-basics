@@ -122,3 +122,29 @@ on the top of the page then use:
 ```
 
 to refer to the static file
+
+## Extending templates
+using one template multiple times. there can be modularity by extending a base template and then extending it to other templates. Those templates will then use their own content in addition to the base layout/template.
+
+to extend in an html file use:
+
+```
+{% extends 'base_template.html' %}
+```
+
+to create a block of html:
+
+```
+{% block content %}
+
+{% endblock %}
+```
+
+in the template you can use:
+
+```
+{% block content%}
+    html content
+{% endblock %}
+```
+
