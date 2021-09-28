@@ -60,6 +60,7 @@ must import the models first and then you can interact with the data/db
 #### get all: .all()
 #### get first: .all()[0]
 #### get by id: .get(id='id')
+#### order by: .order_by("fieldname")
 #### create/save: .save()
 #### update: 
 #### delete:  
@@ -77,3 +78,19 @@ python3 manage.py createsuperuser
 create username and password that you will use then go back to the browser and login
 
 go to app folder, to the admin.py file. register the model so that you can see in the admin
+
+## Template tags
+to make a template tag you use the syntax
+
+python code:
+
+```
+{% python code here %}
+```
+
+to output data:
+
+```
+{{ output data }}
+```
+
