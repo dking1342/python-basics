@@ -148,3 +148,13 @@ in the template you can use:
 {% endblock %}
 ```
 
+## Url parameters
+when requesting a url with dynamic data then a parameter might be used. in order to extract the parameter then in the urls file you need to type:
+
+```
+path('<int:id>',views.file)
+path('<slug:slug>',views.file)
+```
+
+then you can access it in the callback function with the named url parameter
+
