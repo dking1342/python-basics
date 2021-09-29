@@ -158,3 +158,36 @@ path('<slug:slug>',views.file)
 
 then you can access it in the callback function with the named url parameter
 
+when calling the parameter you can use the following syntax when interacting with the db:
+
+```
+def article_details(request,slug):
+    article = Article.objects.get(slug=slug)
+    payload = {"article":article}
+    return render(request,"articles/article_details.html",payload)
+```
+
+## Named urls
+
+you can name a url route to link with by using:
+
+```
+urlpatterns = [
+    path('<slug:slug>',views.article_details,name="details"),
+    path('',views.article_list,name="list"), 
+]
+```
+
+Then in an anchor tag you link it by using the following syntax:
+
+```
+<h2><a href="{% url 'articles:details' slug=article.slug %}">{{article.title}}</a></h2>
+```
+
+The named url can be used in multiple app by specifying the name of the app in the urls file:
+
+```
+app_name = "articles"
+```
+
+## Next topic

@@ -10,8 +10,7 @@ def article_list(request):
     return render(request,"articles/article_list.html",payload)
 
 def article_details(request,slug):
-    # article = Article.objects.get("slug",str(slug))
-    # payload = {"article":article}
-    # print(article)
-    # return render(request,"articles/article_details.html")
-    return HttpResponse(f"{slug}")
+    article = Article.objects.get(slug=slug)
+    payload = {"article":article}
+    return render(request,"articles/article_details.html",payload)
+    # return HttpResponse(f"{slug}")
