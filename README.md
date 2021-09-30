@@ -339,3 +339,31 @@ then the form will look slightly different with the sign in route
 ```
 
 now the user can sign in
+
+## Log in the user
+
+when logging in a user that has already been registered then do the following...
+
+import the following:
+
+```
+from django.contrib.auth import login
+```
+
+then in the signin_view function you can add this to the log in after everything is valid:
+
+```
+# log in the user
+user = form.get_user()
+login(request,user)
+```
+
+for a user that has not registered then do the following in the signup_view:
+
+```
+# log in the user
+user = form.save()
+login(request,user)
+```
+
+
