@@ -277,11 +277,36 @@ def signup_view(request):
 then in the html template then insert a form then add the form payload
 
 ```
-<form class="site-form" action="/accounts/signup" method="POST">
+<form class="site-form" action="/accounts/signup/" method="POST">
+    {% csrf_token %}
     {{ form }}
     <input type="submit" value="Signup">
 </form>
 ```
 
 the form will show all applicable labels and error handlers that will need styling to make it look user ready
+
+## User sign up form POST and GET
+
+in the signup function in the views.py file add this to the function for a POST request:
+
+```
+if request.method == "POST":
+    form = UserCreationForm(request.POST)
+    if form.is_valid():
+        form.save()
+        # log in the user
+        return redirect("articles:list")
+```
+
+redirect can be added to the shortcuts import
+
+for a GET request then do the following:
+
+```
+else:
+    form = UserCreationForm()
+```
+
+now these users will be seen in the admin portal. these people will not be super user admins
 
