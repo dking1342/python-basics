@@ -259,3 +259,29 @@ make a template folder with accounts subfolder, then inside the accounts folders
 make a model for the state involved within the accounts routes, views
 
 ## User creation form
+
+begin by importing the user creation form:
+
+```
+from django.contrib.auth.forms import UserCreationForm
+```
+
+then inside the signup function make a variable form and assign the user creation form to it then add to the payload of the request/response to the view
+
+```
+def signup_view(request):
+    form = UserCreationForm()
+    return render(request,"accounts/signup.html",{"form":form})
+```
+
+then in the html template then insert a form then add the form payload
+
+```
+<form class="site-form" action="/accounts/signup" method="POST">
+    {{ form }}
+    <input type="submit" value="Signup">
+</form>
+```
+
+the form will show all applicable labels and error handlers that will need styling to make it look user ready
+
