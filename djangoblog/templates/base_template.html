@@ -10,11 +10,29 @@
 </head>
 <body>
     <nav>
-        <a href="/">Home</a>
-        <a href="/accounts/signup">Register</a>
-        <a href="/accounts/signin">Sign In</a>
-        <a href="/about">About</a>
-        <a href="/articles">Articles</a>
+        <ul>
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="/accounts/signup">Register</a>
+            </li>
+            <li>
+                <a href="/accounts/signin">Sign In</a>
+            </li>
+            <li>
+                <a href="/about">About</a>
+            </li>
+            <li>
+                <a href="/articles">Articles</a>
+            </li>
+            <li>
+                <form class="logout-link" action="{% url 'accounts:logout' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="logout">
+                </form>
+            </li>
+        </ul>
     </nav>
     <div class="wrapper">
         {% block content %}

@@ -366,4 +366,34 @@ user = form.save()
 login(request,user)
 ```
 
+## Log out users
 
+go to the accounts urls file and add:
+
+```
+path("logout/",views.logout_view,name="logout"),
+```
+
+then go to the views file and create a new function for the logout_views
+
+```
+def logout_view(request):
+    if request.method == "POST":
+        logout(request)
+        return redirect("articles:list")
+```
+
+typically you will use a POST request for logging out a user.
+
+then create a logout button in the base template or some html global template to allow this function to be applied
+
+```
+<li>
+    <form class="logout-link" action="{% url 'accounts:logout' %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="logout">
+    </form>
+</li>
+```
+
+now the user can press the logout button and they are logged out
