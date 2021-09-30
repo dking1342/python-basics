@@ -310,3 +310,32 @@ else:
 
 now these users will be seen in the admin portal. these people will not be super user admins
 
+## User sign in form
+
+similiar to the sign up view and template. use the authentication form instead of user creation form.
+
+in the signin views function it would look like this:
+
+```
+def signin_view(request):
+    if request.method == "POST":
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            # log in the user
+            return redirect("articles:list")
+    else:
+        form = AuthenticationForm()
+    return render(request,"accounts/signin.html",{"form":form})
+```
+
+then the form will look slightly different with the sign in route
+
+```
+<form class="site-form" action="{% url 'accounts:signin' %}" method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="sign in">
+</form>
+```
+
+now the user can sign in

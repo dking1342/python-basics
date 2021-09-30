@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 # from .models import Accounts
 
 
@@ -16,4 +16,11 @@ def signup_view(request):
     return render(request,"accounts/signup.html",{"form":form})
              
 def signin_view(request):
-    pass
+    if request.method == "POST":
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            # log in the user
+            return redirect("articles:list")
+    else:
+        form = AuthenticationForm()
+    return render(request,"accounts/signin.html",{"form":form})
