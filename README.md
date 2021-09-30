@@ -210,7 +210,7 @@ urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 then go to the models.py file and add another field as the thumbnail
 
 ```
-    thumb = models.ImageField(default='default.png',blank=True)
+thumb = models.ImageField(default='default.png',blank=True)
 ```
 
 then migrate the changes to the db using the makemigrations and migrate scripts
@@ -225,6 +225,37 @@ go to the html file where the media will be located and type:
 
 then it will render to the browser for the user to see.
 
-## 
+## User accounts app
 
+create a new users account app:
 
+```
+python3 manage.py startapp accounts
+```
+
+register this app in the settings.py file
+
+```
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'articles',
+    'accounts',
+]
+```
+
+go to the accounts folder and make a urls.py file for the routes of accounts
+
+go back to the main app urls.py file and add accounts to the route list
+
+go to the views.py file in the accounts directory and add functions for the views named in the urls.py file
+
+make a template folder with accounts subfolder, then inside the accounts folders make an html template for the accounts views
+
+make a model for the state involved within the accounts routes, views
+
+## User creation form

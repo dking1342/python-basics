@@ -10,6 +10,7 @@ urlpatterns = [
     path('articles/',include("articles.urls")),
     path('', views.homepage ), # home page
     path('about/', views.about ),
+    path('accounts/',include("accounts.urls")),
     
 ]
 
