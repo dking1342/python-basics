@@ -1,5 +1,6 @@
 from pathlib import Path
 import environ
+import os
 
 # Create and retrieve environment variables
 env = environ.Env()
@@ -116,6 +117,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "assets",
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Default primary key field type

@@ -190,4 +190,41 @@ The named url can be used in multiple app by specifying the name of the app in t
 app_name = "articles"
 ```
 
-## Next topic
+## Set up media
+
+go to the settings.py file and include the following near the static variables
+
+```
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+```
+
+go to the main urls file and include:
+
+```
+from django.conf.urls.static import static
+from django.conf import settings
+urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+```
+
+then go to the models.py file and add another field as the thumbnail
+
+```
+    thumb = models.ImageField(default='default.png',blank=True)
+```
+
+then migrate the changes to the db using the makemigrations and migrate scripts
+
+you can go to the django admin to review existing files or create a new one with a thumbnail. just add via the input field and select the media you wish to add.
+
+go to the html file where the media will be located and type:
+
+```
+<img src="{{ article.thumb.url }}" alt="{{article.title}}">
+```
+
+then it will render to the browser for the user to see.
+
+## 
+
+

@@ -13,4 +13,4 @@ def article_details(request,slug):
     article = Article.objects.get(slug=slug)
     payload = {"article":article}
     return render(request,"articles/article_details.html",payload)
-    # return HttpResponse(f"{slug}")
+
