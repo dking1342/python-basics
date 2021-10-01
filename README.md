@@ -560,4 +560,31 @@ go to the base_template html file and set up a conditional rendering:
 {% endif %}
 ```
 
+## Redirection to homepage
 
+go to main app urls file and import the landing page we want which in this case is the articles list:
+
+```
+from articles import views as article_views
+```
+
+then replace the homepage route with the following:
+
+```
+path('', article_views.article_list,name="home" ), # home page
+```
+
+## Redirect public and private routes
+
+for routes that you want to have only accessible when the user is logged in then you can use the following:
+
+```
+if request.user.is_authenticated:
+    return redirect("home")
+```
+
+then write the rest of your logic in the else statement.
+
+the opposite is true if you want to restrict private routes that shouldn't be accessed if the user is not logged in
+
+you can also use the django built in middleware login_required as seen with the create view to do the same thing

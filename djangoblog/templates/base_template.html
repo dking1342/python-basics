@@ -12,12 +12,9 @@
     <nav>
         <ul>
             <li>
-                <a href="/">Home</a>
+                <a href="{% url 'home' %}">Home</a>
             </li>
             {% if user.is_authenticated %}
-            <li>
-                <a href="/about">About</a>
-            </li>
             <li>
                 <a href="{% url 'articles:list' %}">Articles</a>
             </li>
