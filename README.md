@@ -397,3 +397,45 @@ then create a logout button in the base template or some html global template to
 ```
 
 now the user can press the logout button and they are logged out
+
+## Log in protection and redirection
+
+adding public and private routes based on authentication and if the user is logged in
+
+first go to the articles urls.py file and insert:
+
+```
+path('create/',views.article_create),
+```
+
+then make the function in the article views file along with importing login_required decorator
+
+```
+from django.contrib.auth.decorators import login_required
+
+@login_required(login_url="/accounts/signin/")
+def article_create(request):
+    return render(request,"articles/article_create.html")
+```
+
+then make a template html file to render in the browswer
+
+for redirect go to the signin.html file and add this block if the get request has a next in the url string:
+
+```
+{% if request.GET.next %}
+    <input type="hidden" name="next" value={{request.GET.next}}>
+{% endif %}
+```
+
+then go to the signin_views files and add the code block after login
+
+```
+if "next" in request.POST:
+    return redirect(request.POST.get("next"))
+else:
+    return redirect("articles:list")
+```
+
+this will work when the user comes from the signin page or if it is from another page like the create/
+

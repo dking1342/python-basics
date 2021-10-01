@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Article
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def article_list(request):
@@ -12,3 +13,6 @@ def article_details(request,slug):
     payload = {"article":article}
     return render(request,"articles/article_details.html",payload)
 
+@login_required(login_url="/accounts/signin/")
+def article_create(request):
+    return render(request,"articles/article_create.html")
