@@ -529,5 +529,35 @@ return redirect("articles:list")
 
 now the article will be saved to the db and it will have the user that is logged in as the author
 
+## Check login status
+
+go to the base_template html file and set up a conditional rendering:
+
+```
+{% if user.is_authenticated %}
+<li>
+    <a href="/about">About</a>
+</li>
+<li>
+    <a href="{% url 'articles:list' %}">Articles</a>
+</li>
+<li>
+    <a href="{% url 'articles:create' %}">Create</a>
+</li>
+<li>
+    <form class="logout-link" action="{% url 'accounts:logout' %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="logout">
+    </form>
+</li>
+{% else %}
+<li>
+    <a href="{% url 'accounts:signup' %}">Register</a>
+</li>
+<li>
+    <a href="{% url 'accounts:signin' %}">Sign In</a>
+</li>
+{% endif %}
+```
 
 
