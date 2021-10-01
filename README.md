@@ -497,3 +497,37 @@ else:
 ```
 
 ## Saving to the database after creation
+
+in order for the article to have the user as the author then the model for the article must be updated. first go to the models file and import the User
+
+```
+from django.contrib.auth.models import User
+```
+
+then inside the model you can add the field of author as a foreign key linking to the User
+
+```
+author = models.ForeignKey(User,default=None)
+```
+
+then go through the migration process to implement in the db
+
+```
+python3 manage.py makemigrations
+python3 manage.py migrate
+```
+
+then go to the views function and add the user to the article indirectly:
+
+```
+# save to db
+instance = form.save(commit=False)
+instance.author = request.user
+instance.save()
+return redirect("articles:list")
+```
+
+now the article will be saved to the db and it will have the user that is logged in as the author
+
+
+
