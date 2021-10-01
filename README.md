@@ -439,3 +439,61 @@ else:
 
 this will work when the user comes from the signin page or if it is from another page like the create/
 
+## Model forms
+
+create a file called forms.py in the articles folder.
+
+first import some packages from django:
+
+```
+from django import forms
+from . import models
+```
+
+then create a class and inside the class make a Meta class to define what fields will be in the new form
+
+```
+class CreateArticle(forms.ModelForm):
+    class Meta:
+        model = models.Article
+        fields = ["title","body","slug","thumb"]
+```
+
+go to the article views file and import:
+
+```
+from . import forms
+```
+
+now we can use this inside the function:
+
+```
+@login_required(login_url="/accounts/signin/")
+def article_create(request):
+    form = forms.CreateArticle()
+    return render(request,"articles/article_create.html",{"form":form})
+```
+
+then go to the create article html template and add:
+
+```
+<form action="{% url 'articles:create %}" class="site-form" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Create">
+</form>
+```
+
+then go back to the articles views file and do the following (similar process to the accounts functions where we check the request method and perform the needed steps):
+
+```
+if request.method == "POST":
+    form = forms.CreateArticle(request.POST,request.FILES)
+    if form.is_valid():
+        # save to db
+        return redirect("articles:list")
+else:
+    form = forms.CreateArticle()
+```
+
+## Saving to the database after creation
