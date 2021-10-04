@@ -1,0 +1,21 @@
+<h1>my todo app</h1>
+<a href="{% url 'task-create' %}">Add Task</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.title }}</td>
+            <td><a href="{% url 'task' task.id %}">View</a></td>
+        </tr>
+        {% empty %}
+        <h3>no items in the list</h3>
+        {% endfor %}
+    </tbody>
+</table>
