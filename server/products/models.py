@@ -23,9 +23,10 @@ class Product(models.Model):
     slug = models.SlugField()
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    image = models.ImageField(blank=True,null=True,upload_to="uploads/")
-    thumbnail = models.ImageField(blank=True,null=True,upload_to="uploads/")
+    image = models.ImageField(upload_to="uploads/products",blank=True,null=True)
+    thumbnail = models.ImageField(upload_to="uploads/products/thumbnail",blank=True,null=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ('date_added',)
@@ -38,18 +39,18 @@ class Product(models.Model):
     
     def get_image(self):
         if self.image:
-            return f"http://localhost:8000/{self.image.url}"
+            return self.image.url
         return ""
 
     def get_thumbnail(self):
         if self.image:
-            return f"http://localhost:8000/{self.thumbnail.url}"
+            return self.thumbnail.url
         else:
             if self.image:
                 self.thumbnail = self.make_thumbnail(self.image)
                 self.save()
 
-                return f"http://localhost:8000/{self.thumbnail.url}"
+                return self.thumbnail.url
             else: 
                 return ""
     
