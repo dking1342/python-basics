@@ -4,12 +4,12 @@
             <div class="column is-12">
                 <h2 class="is-size-2 has-text-centered">{{ category.name }}</h2>
             </div>
+            <ProductBox 
+                v-for="product in category.products"
+                :key="product.id"
+                :product="product"
+            />
         </div>
-        <ProductBox 
-            v-for="product in category.products"
-            :key="product.id"
-            :product="product"
-        />
     </div>
 </template>
 
