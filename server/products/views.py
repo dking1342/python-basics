@@ -1,8 +1,8 @@
 from django.shortcuts import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import CategorySerializer, ProductSerializer
 from .models import Product, Category
+from .serializers import CategorySerializer, ProductSerializer
 
 class LatestProductsList(APIView):
     def get(self,request,format=None):
@@ -22,11 +22,11 @@ class ProductDetail(APIView):
         serializer = ProductSerializer(product)
         return Response(serializer.data)
 
-class CategoryDetail(APIView):
+class CategoryDetailView(APIView):
     def get_object(self,category_slug):
         try:
-            return Category.objects.filter(slug=category_slug)
-        except Product.DoesNotExist:
+            return Category.objects.get(slug=category_slug)
+        except Category.DoesNotExist:
             raise Http404
     
     def get(self,request,category_slug,format=None):
