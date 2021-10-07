@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from .models import Note
 from .serializers import NoteSerializer
+from rest_framework.permissions import AllowAny
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -41,6 +42,7 @@ def getRoutes(request):
     return Response(routes)
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def getNotes(request):
     notes = Note.objects.all()
     serializer = NoteSerializer(notes,many=True)
