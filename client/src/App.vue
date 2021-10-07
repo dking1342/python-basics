@@ -33,11 +33,17 @@
           <router-link to="/winter" class="navbar-item">Winter</router-link>
           <div class="navbar-item">
             <div class="buttons">
-              <router-link to="/login" class="button is-light">Log in</router-link>
-              <router-link to="/cart" class="button is-success">
-                <span class="icon"><i class="fas fa-shopping-cart"></i></span>
-                <span>Cart ({{ cartTotalLength }})</span>
-              </router-link>
+              <template v-if="!$store.state.isAuthenticated">
+                <router-link to="/login" class="button is-light">Log in</router-link>
+              </template>
+              <template v-if="$store.state.isAuthenticated">
+                <router-link to="/my-account" class="button is-light">My Account</router-link>
+                <router-link to="/cart" class="button is-success">
+                  <span class="icon"><i class="fas fa-shopping-cart"></i></span>
+                  <span>Cart ({{ cartTotalLength }})</span>
+                </router-link>
+                <button class="button is-danger" @click="logout()">Logout</button>
+              </template>
             </div>
           </div>
         </div>
@@ -86,6 +92,17 @@ export default {
       } else {
         return 0
       }
+    }
+  },
+  methods:{
+    logout(){
+        axios.defaults.headers.common["Authorization"] = ""
+        localStorage.removeItem("token")
+        localStorage.removeItem("username")
+        localStorage.removeItem("userId")
+
+        this.$store.commit('removeToken')
+        this.$router.push("/")
     }
   }
 
