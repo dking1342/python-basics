@@ -1,33 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
+import ListItem from '../components/ListItem'
 
 const NoteListPage = () => {
     let [notes,setNotes] = useState([]);
     let [errors,setErrors] = useState("");
     let [loading, setLoading] = useState(false);
     
-    
-    let getNotes = async () => {
-        setLoading(true);
-        try {
-            let response = await fetch("http://localhost:8000/api/notes/",{
-                method:"GET",
-                mode:"cors",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:null,
-            });
-            let data = await response.json();
-            setNotes(data)
-        } catch (error) {
-            setErrors(error.message)
-        }
-        setLoading(false);
-    }
+    let getNotes = useCallback(async() => {
+            setLoading(true);
+            try {
+                let response = await fetch("/api/notes/",{
+                    method:"GET",
+                    mode:"cors",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:null,
+                });
+                let data = await response.json();
+                setNotes(data)
+            } catch (error) {
+                setErrors(error.message)
+            }
+            setLoading(false);
+        },
+        [],
+    )
 
     useEffect(() => {
         getNotes()
-    }, [])
+    }, [getNotes])
 
 
     if(loading){
@@ -43,11 +45,16 @@ const NoteListPage = () => {
     if (!loading && notes.length){
         return (
             <div>
-                {
-                    notes.map(note=>(
-                        <div key={note.id} >{note.body}</div>
-                    ))
-                }
+                <div className="notes-list">
+                    {
+                        notes.map((note,index)=>(
+                            <ListItem 
+                                key={ note.id }
+                                note={ note }
+                            />
+                        ))
+                    }
+                </div>
             </div>
         )
     } 
