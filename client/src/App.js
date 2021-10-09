@@ -7,10 +7,12 @@ import NotePage from './views/NotePage'
 const App = () => {
   return (
     <Router>
-      <div className="App">
+      <div className="container dark">
+        <div className="app">
           <Header />
           <Route path="/" exact component={ NoteListPage } />
           <Route path="/note/:id" component={ NotePage } />
+        </div>
       </div>
     </Router>
   )
