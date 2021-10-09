@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
+import AddButton from '../components/AddButton';
 import ListItem from '../components/ListItem'
 
 const NoteListPage = () => {
@@ -11,7 +12,6 @@ const NoteListPage = () => {
             try {
                 let response = await fetch("/api/notes/",{
                     method:"GET",
-                    mode:"cors",
                     headers:{
                         "Content-Type":"application/json"
                     },
@@ -59,6 +59,7 @@ const NoteListPage = () => {
                         ))
                     }
                 </div>
+                <AddButton />
             </div>
         )
     } 

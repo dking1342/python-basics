@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
 
 const NotePage = ({ match, history }) => {
     const id = match.params.id;
@@ -30,36 +29,95 @@ const NotePage = ({ match, history }) => {
         history.push("/")
     }
 
-    const handleSubmit = () => {
-        updateNote()
-    }
-
-    const getNote = useCallback(async () => {
+    const deleteNote = async () => {
+        if(window.confirm("Are you sure you want to delete?")){
             setLoading(true);
             try {
-                let response = await fetch(`/api/notes/${id}`,{
-                    method:"GET",
-                    mode:"cors",
+                const deleteResponse = await fetch(`/api/notes/${id}/delete/`,{
+                    method:"DELETE",
                     headers:{
+                        "X-CSRFToken":csrfToken,
                         "Content-Type":"application/json"
                     },
-                    body:null,
-                });
-                let data = await response.json();
-                setNote(data)
+                    body:null
+                })
+                const deleteData = await deleteResponse.json();
+                setNote(deleteData);
             } catch (error) {
                 setErrors(error.message)
             }
             setLoading(false);
+            history.push("/")
+        }
+    }
+
+    const createNote = async () => {
+        setLoading(true);
+        try {
+            const createResponse = await fetch(`/api/notes/create/`,{
+                method:"POST",
+                headers:{
+                    "X-CSRFToken":csrfToken,
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(note)
+            })
+            let createData = await createResponse.json()
+            setNote(createData)
+        } catch (error) {
+            setErrors(error.message)
+        }
+        setLoading(false)
+        history.push("/")
+    }
+
+    const getNote = useCallback(async () => {
+            if(id === "new"){
+                setNote("new note")
+            } else {
+                setLoading(true);
+                try {
+                    let response = await fetch(`/api/notes/${id}`,{
+                        method:"GET",
+                        headers:{
+                            "Content-Type":"application/json"
+                        },
+                        body:null,
+                    });
+                    let data = await response.json();
+                    setNote(data)
+                } catch (error) {
+                    console.log("error",error.message)
+                    setErrors(error.message)
+                }
+                setLoading(false);
+            }
         },
         [id],
     )
 
+    const handleDelete = () => {
+        deleteNote()
+    }
+
+    const handleSubmit = () => {
+        if(note.body && id !== "new"){
+            updateNote()
+        } 
+        if(note.body && id === "new"){
+            createNote()
+        }
+        if(!note.body && id !== "new"){
+            deleteNote()
+        }
+        if(!note.body && id === "new"){
+            history.push("/")
+        }
+    }
+
     useEffect(()=>{
         getNote()
     },[getNote])
-
-    
 
     if(loading){
         return(
@@ -75,12 +133,10 @@ const NotePage = ({ match, history }) => {
         return(
             <div className="note">
                 <div className="note-header">
-                    <h3>
-                        <Link to="/">&#x2039;</Link>
-                    </h3>
-                    <button onClick={ handleSubmit }>Update</button>
+                    <button onClick={ handleSubmit } >&#x2039;</button>
                 </div>
                 <textarea onChange={(e)=> { setNote({...note,"body":e.target.value})}} defaultValue={ note.body }></textarea>
+                <button onClick={ handleDelete } className="floating-button">&#x2715;</button>
             </div>
         )
     }
