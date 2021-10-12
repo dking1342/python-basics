@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'rest_framework_nested',
     'corsheaders',
     'apps.users',
+    'apps.projects',
+    'apps.utils',
+    'apps.submissions',
 ]
 
 CORS_ALLOW_METHODS = [

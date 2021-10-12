@@ -1,11 +1,21 @@
 from django.urls import path,include
 from rest_framework import routers
-from .views import (UserViewSet)
+# from rest_framework_nested import 
+from .views import (UserViewSet,SubmissionsViewSet, CustomAuthToken, UserProfileView)
 
 router = routers.SimpleRouter()
 router.register(r'', UserViewSet)
 
+assignments_router = routers.SimpleRouter(router, r'', lookup='list')
+assignments_router.register(
+    r'submissions',
+    SubmissionsViewSet,
+    basename='submissions'
+)
 
 urlpatterns = [
     path("",include(router.urls)),
+    path("<int:pk>/profile/",UserProfileView.as_view(),name="user-profile"),
+    path('', include(assignments_router.urls)),
+    path('login', CustomAuthToken.as_view()),
 ]
