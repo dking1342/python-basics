@@ -34,8 +34,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'environ',
     'rest_framework',
+    'rest_framework_nested',
     'corsheaders',
-    
+    'apps.users',
 ]
 
 CORS_ALLOW_METHODS = [
@@ -60,6 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTH_USER_MODEL = 'users.User'
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
