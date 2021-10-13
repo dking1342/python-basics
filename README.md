@@ -93,5 +93,52 @@ Then when you need to insert a secret value to it the following way:
 SECRET_KEY = env('SECRET_KEY')
 ```
 
+### Database setup with postgres
+
+### Settings.py file set up (other)
+
+
+### Create an apps folder that holds the project apps
+Django projects have apps for each aspect of the api. You can create a folder that has all the apps by typing in the root folder:
+
+```
+mkdir apps
+```
+
+Create an init file in this folder so that it works properly. Go to the apps folder and type:
+
+```
+touch __init__.py
+```
+
+### Create a new app
+When you want to create a new app then create the folder in the apps folder by typing:
+
+```
+mkdir appfoldername
+```
+
+From the root folder type this to make a new app:
+
+```
+python manage.py startapp blogs apps/blogs
+```
+
+This runs a command that makes a new app with the app name and the location of where it will be made.
+
+### Updating settings file for new app
+Go to the settings.py file and in the INSTALLED_APPS list add the name of the app:
+
+```
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'apps.blogs',
+]
+```
 
 
