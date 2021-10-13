@@ -5,7 +5,7 @@
 ### HTTP response, request cycle
 A REST application as three main parts that are connected to each other: client, api and the database.
 
-<a href="https://images.ctfassets.net/hkpf2qd2vxgx/6LuM2EKyTTq3cziBHcoNQK/d542a85d4c4c9d07a69875ffe7e3b92b/tumblr_inline_mv4xmfwiVv1rtan47.png" alt="http cycle">
+<a href="https://images.ctfassets.net/hkpf2qd2vxgx/6LuM2EKyTTq3cziBHcoNQK/d542a85d4c4c9d07a69875ffe7e3b92b/tumblr_inline_mv4xmfwiVv1rtan47.png" alt="http cycle">See the request response cycle</a>
 
 The client makes a request (GET,POST,PUT,DELETE,etc) to the api which uses logic to process the request. If the request requires data then a request is made from the api to the database and a response back to the api. The api takes that data and sends a response to the client. The status of the response is either a 100, 200, 300, 400 or 500. 
 
@@ -52,5 +52,46 @@ The virtual environment holds all the packages and modules for the project. Use 
 ```
 source venv/bin/activate
 ```
+
+### Start a project
+In the root folder type this in the command prompt:
+
+```
+django-admin startproject config .
+```
+
+This will create a project folder which will hold the configuration files.
+
+### Create env file and insert into the settings file
+Go to the config folder and type the following to create a new env file:
+
+```
+touch .env
+```
+
+In the .env file then add the secret info for the secret key, db and any other secret requirements.
+
+Install the environ module in the virtual environment
+
+```
+pip install django-environ
+```
+
+Go to the settings.py file in the config folder and at the top import environ.
+
+```
+import environ
+
+# Create and retrieve environment variables
+env = environ.Env()
+environ.Env.read_env()
+```
+
+Then when you need to insert a secret value to it the following way:
+
+```
+SECRET_KEY = env('SECRET_KEY')
+```
+
 
 
