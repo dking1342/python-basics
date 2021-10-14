@@ -1,5 +1,6 @@
 from pathlib import Path
 import environ
+import os
 
 # Create and retrieve environment variables
 env = environ.Env()
@@ -30,13 +31,27 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'environ',
     'apps.blogs',
     'apps.blogs_api',
 ]
 
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -70,9 +85,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE':env('ENGINE'),
+        'NAME':env('NAME'),
+        'USER':env('USER'),
+        'PASSWORD':env('PASSWORD'),
+        'HOST':env('HOST'),
+        'PORT':env('PORT'),
+    },
 }
 
 
@@ -113,6 +132,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = '/media/'
+MEDIA_URL = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

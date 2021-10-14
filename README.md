@@ -85,6 +85,16 @@ env = environ.Env()
 environ.Env.read_env()
 ```
 
+Add environ to the installed apps.
+
+```
+INSTALLED_APPS = [
+    ...
+    'environ',
+    ...
+]
+```
+
 Then when you need to insert a secret value to it the following way:
 
 ```
@@ -92,13 +102,53 @@ SECRET_KEY = env('SECRET_KEY')
 ```
 
 ## Database setup with postgres
-Start by going to your terminal and go to the postgres terminal environment.
+Open the env file and enter the secret info the for the postgres server:
+
+```
+ENGINE=django.db.backends.postgresql_psycopg2
+NAME=database_name
+USER=database_user
+PASSWORD=database_password
+HOST=localhost or database_host
+PORT=5432
+```
+
+Go to the settings file and enter the config info for the database:
+
+```
+DATABASES = {
+    'default': {
+        'ENGINE':env('ENGINE'),
+        'NAME':env('NAME'),
+        'USER':env('USER'),
+        'PASSWORD':env('PASSWORD'),
+        'HOST':env('HOST'),
+        'PORT':env('PORT'),
+    }
+}
+```
+
+In the virtual environment use pip to install psycopg2
+
+```
+pip install psycopg2-binary
+```
+
+Go to your terminal and go to the postgres terminal environment.
 
 ```
 psql
 ```
 
+To create the database:
 
+```
+CREATE DATABASE blogs;
+CREATE USER database_user WITH ENCRYPTED PASSWORD 'database_password';
+GRANT ALL PRIVILEGES ON DATABASE blogs TO database_user;
+```
+
+To check and see if the database is there then type \d to see all the databases.
 
 ## Set up the django rest framework
 
@@ -152,6 +202,11 @@ MIDDLEWARE = [
 Make sure to put the corsheader near the top as middleware works from the top to the bottom.
 
 ## Settings.py file set up (other)
+To set up the media files and path then at the bottom of the settings.py file add the following and make sure that the os module in imported:
+
+```
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+```
 
 ## Create an apps folder that holds the project apps
 Django projects have apps for each aspect of the api. You can create a folder that has all the apps by typing in the root folder:
