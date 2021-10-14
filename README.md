@@ -131,7 +131,7 @@ DATABASES = {
 In the virtual environment use pip to install psycopg2
 
 ```
-pip install psycopg2-binary
+pip install psycopg2
 ```
 
 Go to your terminal and go to the postgres terminal environment.
@@ -151,6 +151,32 @@ GRANT ALL PRIVILEGES ON DATABASE blogs TO database_user;
 To check and see if the database is there then type \d to see all the databases.
 
 ## Set up the django rest framework
+Go to your virtual environment and install django rest framework:
+
+```
+pip install djangorestframework
+```
+
+Add django rest framework to your installed apps within the settings.py file:
+
+```
+INSTALLED_APPS = [
+    ...
+    'rest_framework',
+]
+```
+
+Insert this new variable into the settings.py file:
+
+```
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+```
 
 ## Set up the cors settings
 First use pip to install the cors header module to your virtual environment
@@ -277,8 +303,8 @@ Then for the new app make a new path in the urlpatterns list:
 ```
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/blogs/',include('blogs.urls',namespace='blogs')),
-    path('api/v1/blogs_api',include('blogs_api.urls',namespace='blogs_api')),
+    path('api/v1/blogs/',include('apps.blogs.urls')),
+    path('api/v1/blogs_api',include('apps.blogs_api.urls')),
 ]
 ```
 
@@ -330,4 +356,106 @@ To make a class then use the following sytax:
 ```
 
 ## App models.py config for relational db
+Start by importing any modules that you may require. Then create a class which will represent a table in the database.
+
+```
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+```
+
+The columns of the table will be listed then a function __str__ will be included so that the query being sent back will be in a readable format.
+
+You can include classes inside the parent class and other variables, etc needed. The columns will have features similar to an sql db setting. You can add a meta class if you want to do anything special with the table. This is an example of a more elaborate table:
+
+```
+class Post(models.Model):
+
+    class PostObjects(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(status='published')
+
+    options = (
+        ('draft','Draft'),
+        ('published','Published'),
+    )
+
+    category = models.ForeignKey(Category, on_delete=models.PROTECT,default=1)
+    title = models.CharField(max_length=250)
+    excerpt = models.TextField(null=True)
+    content = models.TextField()
+    slug = models.SlugField(max_length=250,unique_for_date='published')
+    published = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User,on_delete=models.CASCADE,related_name='blog_posts')
+    status = models.CharField(max_length=10,choices=option,default='published')    
+    objects = models.Manager()
+    postobjects = PostObjects()
+    
+    class Meta:
+        ordering = ('-published',)
+
+    def __str__(self):
+        return self.title
+```
+
+After you are satisfied with the table and contents within then you will need to work on migrating this model into the actual database. You will need to enter two scripts. The first is a staging area:
+
+```
+python manage.py makemigrations
+```
+
+The second will create, update, delete, etc the table/s in the database
+
+```
+python manage.py migrate
+```
+
+This should create a new folder within your app called migrations. You can check the files inside for the migrations that have taken place when you run these scripts.
+
+You can also go to the psql terminal and query the database to see all the tables that have been added, edited, etc. To do this do this:
+
+```
+# This will change the database being shown
+\c blogs 
+
+This will show all the tables
+\d
+```
+
+## App models.py config for nosql db
+
+## Config admin to show app models
+Go to the admin.py file inside the app folder structure. Inside the admin file you will need to register the model of this app by doing the following:
+
+```
+from django.contrib import admin
+from .models import Category, Post
+
+admin.site.register(Category)
+admin.site.register(Post)
+```
+
+The models need to be made first so that they can be imported. 
+
+## Create superuser for admin
+To make a super user for the admin app then go to the root folder and type:
+
+```
+python manage.py createsuperuser
+```
+
+You will enter a username, email and/or password. This will be your credentials to use the admin portal. Now you can go to the url localhost/admin/ and log in after you start running the server.
+
+## Run the server
+In order to run the server you can type in:
+
+```
+python manage.py runserver
+```
+
+This will create a server to access typically on port 8000. You can access this now and use as per your needs.
+
+If there are any errors blocking the server from running then this will show and you will need to clear these errors before you can use the server.
 
