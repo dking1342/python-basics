@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import Category, Post
+from . import models
 
-admin.site.register(Category)
-admin.site.register(Post)
+@admin.register(models.Post)
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('title','id','status','slug','author')
+    prepopulated_fields = { 'slug' : ('title',),}
+
+admin.site.register(models.Category)

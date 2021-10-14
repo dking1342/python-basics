@@ -342,18 +342,105 @@ The first route here shows <int:pk> which gives the name of the parameter and th
 In the views file within the app you will need to add the logic per the route. The logic can be done with a function or class. The function or class will return a response to the client based on the requirement.
 
 ```
-from django.http.response import HttpResponse
 from django.shortcuts import render
+from rest_framework import generics
+from .models import Post
+from .serializers import PostSerializer
 
 def homepage(request):
     return HttpResponse('django response')
 ```
 
+When working with an api then you will want to add a decorator before the function if that will be utilized by the api in some way then you will need to tell what type of method the function will respond to.
+
 To make a class then use the following sytax:
 
 ```
+class UserProfileView(APIView):
+    def get(self, request, pk):
+        profile = UserProfile.objects.get(user=pk)
+        serializer = UserProfileSerializer(profile)
+        return Response(serializer.data)
+
+    def post(self, request, pk):
+        # name, bio, github_username, avatar, current_level
+        profile = UserProfile(
+            **request.data
+        )
+        profile.user = get_user_model().objects.get(pk=pk)
+        profile.save()
+        
+        return Response('Success')
+
+class PostList(generics.ListCreateAPIView):
+    queryset = Post.postobjects.all()
+    serializer_class = PostSerializer
+```
+
+With an api you want to inherit the Api view.
+
+When using an api then you can use the generics views among other choices that rest framework provides. The following give an explanation of the api views and what they do when you insert them into a view.
 
 ```
+View classes
+
+#CreateAPIView
+Used for create-only endpoints
+
+#ListAPIView
+Used for read-only endpoints to represent a collection of model instances
+
+#RetrieveAPIView
+Userd for read-only endpoints to represent a single model instance
+
+#DestroyAPIView
+User for delete-only endpoints for a single model instance
+
+#UpdateAPIView
+Used for update-only endpoints for a single model instance
+
+#ListCreateAPIView
+Used for read-write endpoints to represent a collection of model instances
+
+#RetrieveUpdateAPIView
+Used for read or update endpoints to represent a single model instance
+
+#RetrieveDestroyAPIView
+Used for read or delete endpoints to represent a single model instance
+
+#RetrieveUpdateDestroyAPIView
+Used for read-write-delete endpoints to represent a single model instance
+
+
+```
+
+## App serializers config and creation
+Inside the app folder you can make a new file called serializers.
+
+```
+touch serializers.py
+```
+
+The serializers act as the mechanism that tells what we want from the dataset and how it should be arranged or formatted. An example of a serializer looks like this:
+
+```
+from rest_framework import serializers
+from .models import Post
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = (
+            'id',
+            'title',
+            'author',
+            'excerpt',
+            'content',
+            'status',
+        )
+```
+
+This will be used within the view.
 
 ## App models.py config for relational db
 Start by importing any modules that you may require. Then create a class which will represent a table in the database.
@@ -431,13 +518,17 @@ Go to the admin.py file inside the app folder structure. Inside the admin file y
 
 ```
 from django.contrib import admin
-from .models import Category, Post
+from . import models
 
-admin.site.register(Category)
-admin.site.register(Post)
+@admin.register(models.Post)
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('title','id','status','slug','author')
+    prepopulated_fields = { 'slug' : ('title',),}
+
+admin.site.register(models.Category)
 ```
 
-The models need to be made first so that they can be imported. 
+The models need to be made first so that they can be imported. In this admin file you can be explicit in what will show up in the admin portal.
 
 ## Create superuser for admin
 To make a super user for the admin app then go to the root folder and type:
@@ -459,3 +550,7 @@ This will create a server to access typically on port 8000. You can access this 
 
 If there are any errors blocking the server from running then this will show and you will need to clear these errors before you can use the server.
 
+## Using Django portal to view endpoints
+You can type in the endpoint based on the urls files and if everything is successful then you will be able to see the data. You can also create, edit, etc the data for this url in the html form view if there are columns in the table of data.
+
+In this portal you can also view the headers, status, url and other features of the request, response objects.
