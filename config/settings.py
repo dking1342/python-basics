@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'environ',
     'apps.blogs',
-    'apps.blogs_api',
 ]
 
 CORS_ALLOW_METHODS = [

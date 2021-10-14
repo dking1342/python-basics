@@ -178,6 +178,8 @@ REST_FRAMEWORK = {
 }
 ```
 
+ <a href="https://www.django-rest-framework.org/">More info and documentation here</a>
+
 ## Set up the cors settings
 First use pip to install the cors header module to your virtual environment
 
@@ -410,8 +412,6 @@ Used for read or delete endpoints to represent a single model instance
 
 #RetrieveUpdateDestroyAPIView
 Used for read-write-delete endpoints to represent a single model instance
-
-
 ```
 
 ## App serializers config and creation
@@ -512,6 +512,9 @@ This will show all the tables
 ```
 
 ## App models.py config for nosql db
+Djongo is a nosql db framework that can be used to have mongo be set up with the django backend.
+
+<a href="https://www.djongomapper.com/get-started/">Quick Startup</a>
 
 ## Config admin to show app models
 Go to the admin.py file inside the app folder structure. Inside the admin file you will need to register the model of this app by doing the following:
@@ -554,3 +557,76 @@ If there are any errors blocking the server from running then this will show and
 You can type in the endpoint based on the urls files and if everything is successful then you will be able to see the data. You can also create, edit, etc the data for this url in the html form view if there are columns in the table of data.
 
 In this portal you can also view the headers, status, url and other features of the request, response objects.
+
+## Django permissions
+### Project level
+In the settings file you can modify the permissions. This will apply to the entire project.
+
+```
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny'
+    ]
+}
+```
+
+The following are categories
+
+```
+#AllowAny
+Anyone can access
+
+#IsAuthenticated
+Only people that are authenticated can access
+
+#IsAdminUser
+Only the admin or superuser can access
+
+#IsAuthenticatedOrReadOnly
+Auth users can access and non auth users can only hae read access
+```
+
+### View level
+Import the permissions from the rest framework.
+
+```
+from rest_framework.permissions import IsAdminUser
+```
+
+Go to the class and add a permission and what type of permission you want to add
+
+```
+class PostList(generics.ListCreateAPIView):
+    permission_classes= [IsAdminUser]
+    queryset = Post.postobjects.all()
+    serializer_class = PostSerializer 
+```
+
+This will be different with functions. You would need to add a decorator above the function and define what type of permission is allowed for that function.
+
+```
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+
+@permission_classes([IsAuthenticated])
+class SubmissionsViewSet(viewsets.ViewSet):
+    def create(self, request, *args, **kwargs):
+        serializer = AssignmentSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save(
+                created_by=request.user,
+                modified_by=request.user
+            )
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+    def list(self, request, *args, **kwargs):
+        queryset = StudentSubmission.objects.filter(student=request.user.id)
+        serializer = AssignmentSerializer(queryset, many=True)
+        return Response(serializer.data)
+```
+
+### Object level
