@@ -92,10 +92,64 @@ SECRET_KEY = env('SECRET_KEY')
 ```
 
 ## Database setup with postgres
+Start by going to your terminal and go to the postgres terminal environment.
+
+```
+psql
+```
+
+
 
 ## Set up the django rest framework
 
 ## Set up the cors settings
+First use pip to install the cors header module to your virtual environment
+
+```
+pip install django-cors-headers
+```
+
+Then go to the settings.py file to the installed apps list and include it.
+
+```
+INSTALLED_APPS = [
+    ...,
+    "corsheaders",
+    ...,
+]
+```
+
+Go to the settings.py file and add the following variables
+
+```
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+CORS_ORIGIN_ALLOW_ALL = True
+```
+
+This will help with the methods and who can access the api. Then go to the middleware and add cors to it.
+
+```
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+```
+
+Make sure to put the corsheader near the top as middleware works from the top to the bottom.
 
 ## Settings.py file set up (other)
 
@@ -182,6 +236,8 @@ Start by importing the path module from django and the app views. Then make a li
 from django.urls import path
 from . import views
 
+app_name = 'blogs'
+
 urlpatterns = [
     path('',views.homepage,name='blogs'), 
     path('something/',Something.as_view(),name='blogs_something')
@@ -189,6 +245,17 @@ urlpatterns = [
 ```
 
 The first path is a function and the second one is a class.
+
+If you want to have parameters in the route then you can make a path like this:
+
+```
+urlpatterns = [
+    path('<int:pk>/',PostDetail.as_view(),name='blog'),
+    path('',PostList.as_view(),name='blogs'),
+]
+```
+
+The first route here shows <int:pk> which gives the name of the parameter and the data type. The data type can be str, slug, int, etc.
 
 ## App views.py config
 In the views file within the app you will need to add the logic per the route. The logic can be done with a function or class. The function or class will return a response to the client based on the requirement.
@@ -199,6 +266,12 @@ from django.shortcuts import render
 
 def homepage(request):
     return HttpResponse('django response')
+```
+
+To make a class then use the following sytax:
+
+```
+
 ```
 
 ## App models.py config for relational db
