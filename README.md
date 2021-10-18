@@ -629,4 +629,107 @@ class SubmissionsViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 ```
 
-### Object level
+## JWT with Django
+Install the jwt module with the following:
+
+```
+pip install djangorestframework-simplejwt
+```
+
+Go to the settings file and within the rest framework variable include the following:
+
+```
+REST_FRAMEWORK = {
+    ...
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        ...
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+    ...
+}
+```
+
+Go to the config urls file and include the following:
+
+```
+...
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView
+)
+
+urlpatterns = [
+    ...
+    path('api/token/',TokenObtainPairView.as_view(),name='token_obtain_pair'),
+    path('api/token/refresh/',TokenRefreshView.as_view(),name='token_refresh'),
+]
+```
+
+Go to POSTMAN and access the endpoint api/token to generate a token using the POST method.
+
+You will need to enter the email and password to access and work through this. This can be done by making a new app with the users inside. Look at the app for more details on how it is made. If database is already populated then you might need drop the database and delete any migrations then try again.
+
+Go back to the settings file and add this:
+
+```
+# Custom user model
+AUTH_USER_MODEL = 'users.NewUser'
+```
+
+Set up the admin for users so that it displays properly in the admin portal.
+
+Go to settings and import and add the following:
+
+```
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': env('SECRET_KEY'),
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+```
+
+Go to the view in the users app and add the customusercreate class along with the serializer.
+
+Create a urls file in the app and include the following:
+
+```
+from django.urls import path
+from .views import CustomUserCreate
+
+app_name = 'users'
+
+urlpatterns = [
+    path('register/',CustomUserCreate.as_view(),name="create_user"),
+]
+```
+
+You will need to connect this from the config urls file as well.
+
+The rest of the config will be done from the front end to access the endpoints to register and login the same way you would with Postman. You will put the jwt tokens in local storage and access then through your state system (global or local).
