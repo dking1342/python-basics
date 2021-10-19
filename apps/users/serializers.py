@@ -1,12 +1,17 @@
+from pkg_resources import require
 from rest_framework import serializers
 from apps.users.models import NewUser
 
 class RegisterUserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True)
+    user_name = serializers.CharField(required=True)
+    password = serializers.CharField(min_length=8,write_only=True)
+
 
     class Meta:
         model = NewUser
         fields = ('email','user_name','password')
-        # extra_kwargs = {'password':{'write-only':True}}
+        extra_kwargs = {'password':{'write-only':True}}
 
     def create(self, validated_data):
         password = validated_data.pop('password',None)

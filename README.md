@@ -733,3 +733,15 @@ urlpatterns = [
 You will need to connect this from the config urls file as well.
 
 The rest of the config will be done from the front end to access the endpoints to register and login the same way you would with Postman. You will put the jwt tokens in local storage and access then through your state system (global or local).
+
+To include the blacklist tokens go to settings and add the following:
+
+```
+INSTALLED_APPS = [
+    ...
+    'rest_framework_simplejwt.token_blacklist',
+    ...
+]
+```
+
+Use the django-2 repo to go through the login, register and logout views. They are functions but you can use classes if you want.
